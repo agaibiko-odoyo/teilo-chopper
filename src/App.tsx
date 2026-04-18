@@ -6,6 +6,7 @@
 import { useState, useEffect, MouseEvent, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Heart, Play, Pause, Volume2, VolumeX, Music } from 'lucide-react';
+import { Heart, Play, Pause, Volume2, VolumeX, Music, Sun, Moon } from 'lucide-react';
 
 const AUDIO_FILE_PATH = "/riptide.mp3"; // Place your song in the public folder as our-song.mp3
 
@@ -331,7 +332,7 @@ useEffect(() => {
   className="fixed top-6 right-6 z-50 p-3 rounded-full bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md border border-white/50 dark:border-white/10 shadow-lg hover:scale-110 active:scale-95 transition-all duration-300"
   aria-label="Toggle dark mode"
 >
-  {isDark ? '☀️' : '🌙'}
+  {isDark ? <Sun size={20} /> : <Moon size={20} />}
 </button> 
 
       <div className="w-full max-w-[940px] grid grid-cols-1 md:grid-cols-4 md:grid-rows-4 gap-5 md:min-h-[680px] z-10">
