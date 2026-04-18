@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
+  /* Light mode colors (your current ones) */
   --color-bento-bg: #fff9fb;
   --color-bento-text: #5d4a4a;
   --color-card-bg: #ffffff;
@@ -13,6 +16,19 @@
   --color-note-text: #6d6d8a;
   --color-cal-date: #9e8a8a;
 
+  /* Dark mode colors – soft & romantic (not harsh black) */
+  --color-bento-bg-dark: #1a1418;
+  --color-bento-text-dark: #e8d5d8;
+  --color-card-bg-dark: #2a1f24;
+  --color-card-border-dark: rgba(255, 182, 193, 0.15);
+  --color-tag-dark: #ff9fb2;
+  --color-hero-text-dark: #ff8fa6;
+  --color-hero-bg-dark: #2f1f24;
+  --color-hug-bg-dark: #2a221f;
+  --color-note-bg-dark: #1f1c2e;
+  --color-note-text-dark: #c8c0d8;
+  --color-cal-date-dark: #b8a8a8;
+
   --font-serif: "Georgia", serif;
   --font-sans: "Trebuchet MS", sans-serif;
 }
@@ -21,11 +37,31 @@ body {
   background-color: var(--color-bento-bg);
   color: var(--color-bento-text);
   font-family: var(--font-serif);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Dark mode overrides using CSS variables */
+.dark body {
+  --color-bento-bg: var(--color-bento-bg-dark);
+  --color-bento-text: var(--color-bento-text-dark);
+  --color-card-bg: var(--color-card-bg-dark);
+  --color-card-border: var(--color-card-border-dark);
+  --color-tag: var(--color-tag-dark);
+  --color-hero-text: var(--color-hero-text-dark);
+  --color-hero-bg: var(--color-hero-bg-dark);
+  --color-hug-bg: var(--color-hug-bg-dark);
+  --color-note-bg: var(--color-note-bg-dark);
+  --color-note-text: var(--color-note-text-dark);
+  --color-cal-date: var(--color-cal-date-dark);
 }
 
 @layer utilities {
   .bento-shadow {
     box-shadow: 0 10px 30px rgba(255, 182, 193, 0.15);
+  }
+  
+  .dark .bento-shadow {
+    box-shadow: 0 10px 30px rgba(255, 182, 193, 0.08);
   }
 }
 
