@@ -109,10 +109,25 @@ const REMINDERS = [
   { title: "Picnic at the Karura", date: "2026-05-23", type: 'calendar' }
 ];
 
+const LITTLE_REMINDERS = [
+  "I was just thinking about that time we walked through town together on a saturday afternoon. You looked so happy, and I realized then how lucky I am to be the one walking beside you.",
+  "Remember when we couldn't stop laughing at that silly joke? Those moments with you are my absolute favorite.",
+  "I just caught myself smiling re-reading our old messages. You always know exactly how to make my day.",
+  "Sometimes I just pause and appreciate how incredibly lucky I am to have you in my life.",
+  "Thinking about your smile right now. It completely melts my heart every single time.",
+  "I love how we can do absolutely nothing together and it still feels like the best day ever.",
+  "You have this amazing ability to make everything feel okay, just by being you.",
+  "Just a little reminder that you are my favorite part of every single day.",
+  "I was thinking about how much you've grown and how proud I am of the person you are.",
+  "No matter how busy things get, you are always the best thought in my mind."
+];
+
 export default function App() {
   const [noteIndex, setNoteIndex] = useState(0);
   const [hugParticles, setHugParticles] = useState<{ id: number, x: number; y: number, isMobile?: boolean }[]>([]);
   const [activeReminders, setActiveReminders] = useState<typeof REMINDERS>([]);
+  const [littleReminderText, setLittleReminderText] = useState(LITTLE_REMINDERS[0]);
+  const [hoursSinceUpdate, setHoursSinceUpdate] = useState(0);
 
   useEffect(() => {
     // Generate a daily index based on local timezone date, ensuring no consecutive duplicates
@@ -161,6 +176,15 @@ export default function App() {
     
     // Pick all reminders
     setActiveReminders(shuffledReminders);
+
+    // Pick a little reminder text using the same seeded two-hour block
+    const reminderIndex = Math.floor(prng(twoHourBlock * 10) * LITTLE_REMINDERS.length);
+    setLittleReminderText(LITTLE_REMINDERS[reminderIndex]);
+
+    // Calculate how many hours since the block started (0 or 1 basically)
+    const currentHour = new Date().getHours();
+    const hoursSince = currentHour % 2;
+    setHoursSinceUpdate(hoursSince);
   }, []);
 
   const triggerHug = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -249,9 +273,11 @@ export default function App() {
         >
           <div className="text-[14px] uppercase tracking-[2px] text-[var(--color-tag)] mb-4 font-semibold font-sans">A Little Reminder</div>
           <p className="text-[16px] md:text-[18px] leading-[1.6] text-[var(--color-note-text)] font-serif italic m-0">
-            I was just thinking about that time we walked through town together on a saturday afternoon. You looked so happy, and I realized then how lucky I am to be the one walking beside you. 
+            {littleReminderText}
           </p>
-          <div className="absolute bottom-[15px] right-[15px] text-[11px] text-[#d1c1c1] uppercase tracking-[1px] font-sans">Updated 2 hours ago</div>
+          <div className="absolute bottom-[15px] right-[15px] text-[11px] text-[#d1c1c1] uppercase tracking-[1px] font-sans">
+            Updated {hoursSinceUpdate === 0 ? "recently" : "1 hour ago"}
+          </div>
         </motion.div>
 
         {/* 4. Hug Card (Bottom Left: col 1, rows 3-4) */}
