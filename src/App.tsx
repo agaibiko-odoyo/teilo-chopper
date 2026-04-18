@@ -3,9 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect, MouseEvent, useMemo } from 'react';
+import { useState, useEffect, MouseEvent, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Heart, Calendar as CalendarIcon, Star, Sparkles } from 'lucide-react';
+import { Heart, Play, Pause, Volume2, VolumeX, Music } from 'lucide-react';
+
+const AUDIO_FILE_PATH = "/our-song.mp3"; // Place your song in the public folder as our-song.mp3
 
 const NOTES = [
   "You are an absolute ray of sunshine.",
@@ -106,7 +108,7 @@ const REMINDERS = [
   { title: "Your Birthday", date: "2026-06-15", type: 'star' },
   { title: "Our Anniversary", date: "2026-10-17", type: 'heart' },
   { title: "Sip N Paint, Home --V", date: "2026-06-06", type: 'calendar' },
-  { title: "Picnic at the Karura", date: "2026-05-23", type: 'calendar' }
+  { title: "Picnic at Karura", date: "2026-05-23", type: 'calendar' }
 ];
 
 const LITTLE_REMINDERS = [
@@ -128,6 +130,29 @@ export default function App() {
   const [activeReminders, setActiveReminders] = useState<typeof REMINDERS>([]);
   const [littleReminderText, setLittleReminderText] = useState(LITTLE_REMINDERS[0]);
   const [hoursSinceUpdate, setHoursSinceUpdate] = useState(0);
+
+  // Audio Player State
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play().catch(e => console.log("Audio play failed:", e));
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
 
   useEffect(() => {
     // Generate a daily index based on local timezone date, ensuring no consecutive duplicates
@@ -230,8 +255,31 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-8 px-4 sm:px-6 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center py-8 px-4 sm:px-6 relative overflow-hidden">
       <AmbientParticles />
+      
+      {/* Cute Audio Player Pill */}
+      <motion.div 
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+        className="z-50 mb-6 flex items-center gap-3 bg-white/60 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/50 shadow-[0_8px_20px_rgba(255,159,178,0.15)] text-[var(--color-hero-text)] relative overflow-hidden group"
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-[#ffafbd]/10 to-[#ffc3a0]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <Music size={16} className={`relative z-10 ${isPlaying ? 'animate-bounce text-[#be123c]' : 'text-[var(--color-tag)]'}`} />
+        <span className="relative z-10 font-sans text-[11px] font-bold tracking-[2px] uppercase opacity-80 mr-2 text-[#9a6a6a]">Our Song</span>
+        
+        <button onClick={togglePlay} className="relative z-10 text-[#9a6a6a] hover:text-[#be123c] transition-colors hover:scale-110 active:scale-95">
+          {isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" />}
+        </button>
+        
+        <button onClick={toggleMute} className="relative z-10 text-[#9a6a6a] hover:text-[#be123c] transition-colors hover:scale-110 active:scale-95 ml-1">
+          {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+        </button>
+
+        <audio ref={audioRef} src={AUDIO_FILE_PATH} loop />
+      </motion.div>
+
       <div className="w-full max-w-[940px] grid grid-cols-1 md:grid-cols-4 md:grid-rows-4 gap-5 md:min-h-[680px] z-10">
         
         {/* 1. Hero Card (Main Note Card, spans 3 cols, 2 rows) */}
