@@ -136,6 +136,9 @@ export default function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
 
+  // Dark Mode State
+const [isDark, setIsDark] = useState(false);
+
   const togglePlay = async () => {
   const audio = audioRef.current;
   if (!audio) return;
@@ -160,6 +163,19 @@ export default function App() {
       setIsMuted(!isMuted);
     }
   };
+
+  const toggleDarkMode = () => {
+  const newDark = !isDark;
+  setIsDark(newDark);
+
+  if (newDark) {
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
+  }
+};
 
   useEffect(() => {
     // Generate a daily index based on local timezone date, ensuring no consecutive duplicates
@@ -218,6 +234,22 @@ export default function App() {
     const hoursSince = currentHour % 2;
     setHoursSinceUpdate(hoursSince);
   }, []);
+
+
+  // Dark Mode Setup
+useEffect(() => {
+  const savedTheme = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+
+  setIsDark(shouldBeDark);
+  if (shouldBeDark) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+}, []);
 
   const triggerHug = async (e: MouseEvent<HTMLButtonElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -290,7 +322,15 @@ export default function App() {
   loop 
   controls 
   preload="metadata"
-  style={{ display: 'none' }}  // helps with loading
+  style={{ display: 'none' }} 
+  {/* Dark Mode Toggle - Top Right */}
+<button
+  onClick={toggleDarkMode}
+  className="fixed top-6 right-6 z-50 p-3 rounded-full bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md border border-white/50 dark:border-white/10 shadow-lg hover:scale-110 active:scale-95 transition-all duration-300"
+  aria-label="Toggle dark mode"
+>
+  {isDark ? '☀️' : '🌙'}
+</button>     // helps with loading
 />
       </motion.div>
 
