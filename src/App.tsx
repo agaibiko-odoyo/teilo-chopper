@@ -277,7 +277,13 @@ export default function App() {
           {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
         </button>
 
-        <audio ref={audioRef} src={AUDIO_FILE_PATH} loop />
+        <audio 
+  ref={audioRef} 
+  src={AUDIO_FILE_PATH} 
+  loop 
+  controls 
+  preload="metadata"   // helps with loading
+/>
       </motion.div>
 
       <div className="w-full max-w-[940px] grid grid-cols-1 md:grid-cols-4 md:grid-rows-4 gap-5 md:min-h-[680px] z-10">
