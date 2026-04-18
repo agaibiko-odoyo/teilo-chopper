@@ -7,7 +7,7 @@ import { useState, useEffect, MouseEvent, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Heart, Play, Pause, Volume2, VolumeX, Music } from 'lucide-react';
 
-const AUDIO_FILE_PATH = "/our-song.mp3"; // Place your song in the public folder as our-song.mp3
+const AUDIO_FILE_PATH = "/riptide.mp3"; // Place your song in the public folder as our-song.mp3
 
 const NOTES = [
   "You are an absolute ray of sunshine.",
