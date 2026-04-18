@@ -322,7 +322,9 @@ useEffect(() => {
   loop 
   controls 
   preload="metadata"
-  style={{ display: 'none' }} 
+  style={{ display: 'none' }}    // helps with loading
+/>
+      </motion.div>    
   {/* Dark Mode Toggle - Top Right */}
 <button
   onClick={toggleDarkMode}
@@ -330,9 +332,7 @@ useEffect(() => {
   aria-label="Toggle dark mode"
 >
   {isDark ? '☀️' : '🌙'}
-</button>     // helps with loading
-/>
-      </motion.div>
+</button> 
 
       <div className="w-full max-w-[940px] grid grid-cols-1 md:grid-cols-4 md:grid-rows-4 gap-5 md:min-h-[680px] z-10">
         
